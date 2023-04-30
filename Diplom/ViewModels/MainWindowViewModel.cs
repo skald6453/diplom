@@ -12,7 +12,7 @@ namespace Diplom.ViewModels
     {
         public MainWindowViewModel()
         {
-            ShowDialogFFT = new Interaction<FFTWindowViewModel, TestViewModel?>();
+            ShowDialogFFT = new Interaction<FFTWindowViewModel, SettingsViewModel?>();
 
             FFTGraphCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -21,7 +21,7 @@ namespace Diplom.ViewModels
                 var result = await ShowDialogFFT.Handle(fft);
             });
 
-            ShowDialogSettings = new Interaction<SettingsWindow, TestViewModel?>();
+            ShowDialogSettings = new Interaction<SettingsWindow, SettingsViewModel?>();
 
             SettingsCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -30,12 +30,12 @@ namespace Diplom.ViewModels
             });
         }
         public ICommand FFTGraphCommand { get; }
-        public Interaction<FFTWindowViewModel, TestViewModel?> ShowDialogFFT { get; }
+        public Interaction<FFTWindowViewModel, SettingsViewModel?> ShowDialogFFT { get; }
         public double Freq { get; set; }
 
         public ICommand SettingsCommand { get;}
 
-        public Interaction<SettingsWindow, TestViewModel?> ShowDialogSettings { get; } 
+        public Interaction<SettingsWindow, SettingsViewModel?> ShowDialogSettings { get; } 
 
         public int ShownInput
         {

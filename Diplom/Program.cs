@@ -22,5 +22,6 @@ namespace Diplom
                 .UsePlatformDetect()
                 .LogToTrace()
                 .UseReactiveUI();
+        
     }
 }

@@ -31,19 +31,28 @@ public partial class SettingsWindow : Avalonia.Controls.Window
     WasapiCapture AudioDevice;
     double[] AudioValues;
     double[] FftValues;
-    public List<string> inputNames = new();
+    public SettingsViewModel viewModel = new();
     public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 60);
     public DispatcherTimer timer = new DispatcherTimer { Interval = framerate };
+    public MusicamContext context = new();
     public SettingsWindow()
     {
         InitializeComponent();
         var boxitem = this.Find<ComboBox>("Inputs");
         boxitem = ListOfInputs(AudioDevices);
         var button = this.Find<Button>("Accept");
+        context.Devices.RemoveRange(context.Devices);
+        context.SaveChanges();
         //здесь можно просто перезаписать активное устройство в бд, а в fftwin брать из бд
         button.Click += (s, e) =>
         {
-            WasapiCapture audiodevice = GetSelectedDevice(boxitem);
+            Device inputDevice = new()
+            {
+                Id = boxitem.SelectedIndex,
+                Name = AudioDevices[boxitem.SelectedIndex].DeviceFriendlyName,
+            };
+            context.Devices.Add(inputDevice);
+            context.SaveChanges();
             this.Close();
         };
         //boxitem.SelectionChanged += new EventHandler<Avalonia.Controls.SelectionChangedEventArgs>();
@@ -52,27 +61,18 @@ public partial class SettingsWindow : Avalonia.Controls.Window
     public ComboBox ListOfInputs(MMDevice[] AudioDevices)
     {
         var boxitem = this.Find<ComboBox>("Inputs");
-
+        List<string> inp = new();
 
         foreach (MMDevice device in AudioDevices)
         {
             string deviceType = device.DataFlow == DataFlow.Capture ? "INPUT" : "OUTPUT";
-            
             string deviceLabel = $"{deviceType}: {device.FriendlyName}";
-            inputNames.Add(deviceLabel);
+            inp.Add(deviceLabel);
         }
-      
-        boxitem.Items = inputNames;
-
+        viewModel.Inputs = inp;
+        boxitem.Items = inp;
         return boxitem;
     }
 
-    private WasapiCapture GetSelectedDevice(ComboBox boxitem)
-    {
-
-        MMDevice selectedDevice = AudioDevices[boxitem.SelectedIndex];
-        return selectedDevice.DataFlow == DataFlow.Render
-            ? new WasapiLoopbackCapture(selectedDevice)
-            : new WasapiCapture(selectedDevice, true, 10);
-    }
+   
 }

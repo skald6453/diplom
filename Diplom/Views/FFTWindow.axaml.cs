@@ -16,6 +16,7 @@ using Avalonia.Threading;
 using Avalonia.Media;
 using ScottPlot;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Diplom.Views;
 
@@ -32,6 +33,7 @@ public partial class FFTWindow : Avalonia.Controls.Window
     public FFTWindowViewModel inputNames = new();
     public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 60);
     public DispatcherTimer timer = new DispatcherTimer { Interval = framerate };
+    public MusicamContext context = new();
     public FFTWindow()
     {
         InitializeComponent();
@@ -39,11 +41,24 @@ public partial class FFTWindow : Avalonia.Controls.Window
 
         //надо придумать как вызывать методы ниже при смене значения в комбобоксе, а то так получается
         //что у меня один раз выбирается аудиовход и все, больше ничего не происходит
-        //WasapiCapture audiodevice = GetSelectedDevice(boxitem);
-        //FftMonitor(audiodevice);
+        WasapiCapture audiodevice = GetSelectedDevice();
+        FftMonitor(audiodevice);
     }
 
-    
+    private WasapiCapture GetSelectedDevice()
+    {
+        string deviceName = "";
+        int deviceIndex = 0;
+        foreach(Device device in context.Devices)
+        {
+            deviceName = device.Name;
+            deviceIndex = device.Id;
+        }
+        MMDevice selectedDevice = AudioDevices[deviceIndex];
+        return selectedDevice.DataFlow == DataFlow.Render
+            ? new WasapiLoopbackCapture(selectedDevice)
+            : new WasapiCapture(selectedDevice, true, 10);
+    }
 
 
     public void FftMonitor(WasapiCapture audiodevice)
