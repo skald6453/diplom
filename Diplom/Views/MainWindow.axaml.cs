@@ -2,12 +2,15 @@ using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using Diplom.ViewModels;
 using ReactiveUI;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Diplom.Views
 {
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
+        public MusicamContext context = new();
+        public MainWindowViewModel model = new();
         public MainWindow()
         {
             InitializeComponent();
@@ -36,7 +39,5 @@ namespace Diplom.Views
             var result = await dialog.ShowDialog<SettingsViewModel?>(this);
             interaction.SetOutput(result);
         }
-
-
     }
 }

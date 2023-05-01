@@ -13,6 +13,23 @@
         ExtendClientAreaToDecorationsHint="True"
         WindowStartupLocation="CenterScreen">
 
+  <Window.Styles>
+    <Style Selector="Button.nav">
+      <Setter Property="Background" Value="green"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Opacity" Value="0.5"/>
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="Opacity" Duration="0:0:2.2"/>
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Button.nav">
+      <Setter Property="Opacity" Value="1"/>
+      <Setter Property="Background" Value="Transparent"/>
+    </Style>
+  </Window.Styles>
+  
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
@@ -30,11 +47,32 @@
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
     <Panel Margin="40">
-      <Button Content="FFTGraph"  Background="#D0BDB2" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{Binding FFTGraphCommand}"/>
-      <Button Content="Настройки" Background="#D0BDB2" VerticalAlignment="Top" Command="{Binding SettingsCommand}"/>
+      <Button Classes="nav" Content="FFTGraph" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{Binding FFTGraphCommand}"/>
+      <Button Classes="nav" Content="Настройки" VerticalAlignment="Top" Command="{Binding SettingsCommand}"/>
     </Panel>
-  
+
+    <DockPanel>
+    <StackPanel DockPanel.Dock="Top">
+      <TextBox Width="400" Margin="80" Text="{Binding SearchText}" Watermark="Поиск песен...." />
+      
+    </StackPanel>
+      <ListBox Foreground="White" Name="Songs" Background="Transparent" Items="{Binding SearchResults}" Margin="0 20" />
+    </DockPanel>
+    <StackPanel Spacing="5" Width="200">
+    <Border CornerRadius="10" ClipToBounds="True">
+        <Panel Name="Song" Background="#D0BDB2">
+            <Image Width="200" Stretch="Uniform" Source="{Binding Cover}" />
+          <TextBlock Text="{Binding SongName}" HorizontalAlignment="Center" />
+          <TextBlock Text="{Binding Artist}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30"/>
+            <Panel Height="200" IsVisible="{Binding Cover, Converter={x:Static ObjectConverters.IsNull}}">
+            </Panel>
+        </Panel>
+    </Border>
+    
+</StackPanel>
+
   </Panel>
+  
 
 
 </Window>
