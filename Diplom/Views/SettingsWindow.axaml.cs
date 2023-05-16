@@ -32,8 +32,8 @@ public partial class SettingsWindow : Avalonia.Controls.Window
     double[] AudioValues;
     double[] FftValues;
     public SettingsViewModel viewModel = new();
-    public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 60);
-    public DispatcherTimer timer = new DispatcherTimer { Interval = framerate };
+    //public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 60);
+    //public DispatcherTimer timer = new DispatcherTimer { Interval = framerate };
     public MusicamContext context = new();
     public SettingsWindow()
     {

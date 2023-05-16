@@ -23,6 +23,7 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.19" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.19" />
     <PackageReference Include="FftSharp" Version="1.1.6" />
+    <PackageReference Include="Melanchall.DryWetMidi" Version="6.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -17,6 +17,9 @@ using Avalonia.Media;
 using ScottPlot;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
+using Melanchall.DryWetMidi;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Multimedia;
 
 namespace Diplom.Views;
 
@@ -34,6 +37,34 @@ public partial class FFTWindow : Avalonia.Controls.Window
     public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 60);
     public DispatcherTimer timer = new DispatcherTimer { Interval = framerate };
     public MusicamContext context = new();
+    public Dictionary<string, double> noteBaseFreqs = new Dictionary<string, double>()
+            {
+                 { "C3", 130 },
+                { "C#3", 138 },
+                { "D3", 146 },
+                { "Eb3", 155 },
+                { "E3", 164 },
+                { "F3", 174 },
+                { "F#3", 185 },
+                { "G3", 196 },
+                { "G#3", 207 },
+                { "A3", 220 },
+                { "Bb3", 233 },
+                { "B3", 246 },
+                { "C4", 261.63f },
+                { "C#4", 277.18f },
+                { "D4", 293.66f },
+                { "Eb4", 311.13f },
+                { "E4", 329.63f },
+                { "F4", 349.23f },
+                { "F#4", 369.12f },
+                { "G4", 392 },
+                { "G#4", 415 },
+                { "A4", 440 },
+                { "Bb4", 466 },
+                { "B4", 493 },
+            };
+    private static Playback playback;
     public FFTWindow()
     {
         InitializeComponent();
@@ -43,6 +74,17 @@ public partial class FFTWindow : Avalonia.Controls.Window
         //что у меня один раз выбирается аудиовход и все, больше ничего не происходит
         WasapiCapture audiodevice = GetSelectedDevice();
         FftMonitor(audiodevice);
+    
+      
+        
+        //playback = file.GetPlayback(output);
+        //playback.NotesPlaybackStarted += OnNotesPlaybackStarted;
+        //playback.Start();
+    }
+    private static void OnNotesPlaybackStarted(object sender, NotesEventArgs e)
+    {
+        if (e.Notes.Any(n => n.NoteName == Melanchall.DryWetMidi.MusicTheory.NoteName.B))
+            playback.Stop();
     }
 
     private WasapiCapture GetSelectedDevice()
@@ -80,7 +122,7 @@ public partial class FFTWindow : Avalonia.Controls.Window
 
         AvaPlot plt = this.Find<AvaPlot>("AvaPlot1");
         plt.Refresh();
-        plt.Plot.AddSignal(FftValues, fftPeriod);
+        plt.Plot.AddSignal(filtered, fftPeriod);
         plt.Plot.YLabel("Spectral Power");
         plt.Plot.XLabel("Frequency (kHz)");
         plt.Plot.SetAxisLimits(0, 6000, 0, .005);
@@ -146,7 +188,22 @@ public partial class FFTWindow : Avalonia.Controls.Window
         double fftPeriod = FftSharp.Transform.FFTfreqPeriod(AudioDevice.WaveFormat.SampleRate, fftMag.Length);
         double peakFrequency = fftPeriod * peakIndex;
         inputNames.Freq = Math.Round(peakFrequency);
-        label.Text = $"Peak Frequency: {inputNames.Freq} Hz";
+        string noti = "";
+        foreach(var note in noteBaseFreqs)
+        {
+           double baseFreq = note.Value;
+
+            for (int i = 0; i < 9; i++)
+            {
+                if ((inputNames.Freq >= baseFreq - 1) && (inputNames.Freq < baseFreq + 1) || (inputNames.Freq == baseFreq))
+                {
+                    noti = note.Key; break;
+                }
+
+                baseFreq *= 2;
+            }
+        }
+        label.Text = $"{noti}";
 
         // request a redraw using a non-blocking render queue
         plt.RefreshRequest();

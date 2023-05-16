@@ -3,6 +3,7 @@
         xmlns:vm="using:Diplom.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:Diplom.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Diplom.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -46,30 +47,21 @@
             MaterialOpacity="0.25" />
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
+    
     <Panel Margin="40">
       <Button Classes="nav" Content="FFTGraph" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{Binding FFTGraphCommand}"/>
       <Button Classes="nav" Content="Настройки" VerticalAlignment="Top" Command="{Binding SettingsCommand}"/>
     </Panel>
 
     <DockPanel>
-    <StackPanel DockPanel.Dock="Top">
-      <TextBox Width="400" Margin="80" Text="{Binding SearchText}" Watermark="Поиск песен...." />
+
+      <Panel Margin="70">
+      <local:SearchView />
       
-    </StackPanel>
-      <ListBox Foreground="White" Name="Songs" Background="Transparent" Items="{Binding SearchResults}" Margin="0 20" />
+      </Panel>
+
+     
     </DockPanel>
-    <StackPanel Spacing="5" Width="200">
-    <Border CornerRadius="10" ClipToBounds="True">
-        <Panel Name="Song" Background="#D0BDB2">
-            <Image Width="200" Stretch="Uniform" Source="{Binding Cover}" />
-          <TextBlock Text="{Binding SongName}" HorizontalAlignment="Center" />
-          <TextBlock Text="{Binding Artist}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30"/>
-            <Panel Height="200" IsVisible="{Binding Cover, Converter={x:Static ObjectConverters.IsNull}}">
-            </Panel>
-        </Panel>
-    </Border>
-    
-</StackPanel>
 
   </Panel>
   
