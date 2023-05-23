@@ -59,7 +59,7 @@ namespace Diplom.Views
                 DataContext = new SongPlayWindowViewModel(),
             };
             dialog.DataContext = interaction.Input;
-
+            
             var result = await dialog.ShowDialog<SongPlayWindowViewModel?>(this);
             interaction.SetOutput(result);
         }
