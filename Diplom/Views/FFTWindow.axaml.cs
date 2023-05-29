@@ -36,7 +36,7 @@ public partial class FFTWindow : Avalonia.Controls.Window
     public FFTWindowViewModel inputNames = new();
     public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 60);
     public DispatcherTimer timer = new DispatcherTimer { Interval = framerate };
-    public MusicamContext context = new();
+    public MusicamDbContext context = new();
     public Dictionary<string, double> noteBaseFreqs = new Dictionary<string, double>()
             {
                  { "C3", 130 },
@@ -91,10 +91,10 @@ public partial class FFTWindow : Avalonia.Controls.Window
     {
         string deviceName = "";
         int deviceIndex = 0;
-        foreach(Device device in context.Devices)
+        foreach(Devices2 device in context.Devices2s)
         {
             deviceName = device.Name;
-            deviceIndex = device.Id;
+            deviceIndex = (int)device.Id;
         }
         MMDevice selectedDevice = AudioDevices[deviceIndex];
         return selectedDevice.DataFlow == DataFlow.Render
@@ -122,7 +122,7 @@ public partial class FFTWindow : Avalonia.Controls.Window
 
         AvaPlot plt = this.Find<AvaPlot>("AvaPlot1");
         plt.Refresh();
-        plt.Plot.AddSignal(filtered, fftPeriod);
+        plt.Plot.AddSignal(FftValues, fftPeriod);
         plt.Plot.YLabel("Spectral Power");
         plt.Plot.XLabel("Frequency (kHz)");
         plt.Plot.SetAxisLimits(0, 6000, 0, .005);

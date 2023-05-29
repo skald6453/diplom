@@ -10,17 +10,20 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Windows.Input;
 using Diplom.ViewModels;
+using SQLitePCL;
+using Microsoft.Data.Sqlite;
 
 namespace Diplom.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        MusicamContext context = new();
+        MusicamDbContext context = new();
         public MainWindowViewModel()
         {
-            foreach (Song song in context.Songs)
+            string cover = "D:\\diplomFull\\Diplom\\Assets\\songView.png";
+            foreach (Songs2 song in context.Songs2s)
             {
-                SongMetadata album = new(song.Author, song.Name, "C:\\Users\\samael\\Desktop\\DungeonSynthProj\\finalcoverEE.jpg");
+                SongMetadata album = new(song.Author, song.Name, cover);
                 SearchResults.Add(song.Name);
                 SearchSongs.Add(new SongViewModel(album));
             }
@@ -59,7 +62,7 @@ namespace Diplom.ViewModels
         public async void DoSearch(string s)
         {
             SearchSongs.Clear();
-            foreach (Song song in context.Songs)
+            foreach (Songs2 song in context.Songs2s)
             {
 
                 if (s != null && song.Name.Contains(s))

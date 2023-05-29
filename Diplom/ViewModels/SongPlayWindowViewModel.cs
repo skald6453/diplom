@@ -8,6 +8,6 @@ namespace Diplom.ViewModels
 {
     public class SongPlayWindowViewModel:ViewModelBase
     {
-        string name { get; set; }
+        string NoteName { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Diplom.Views
 {
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
-        public MusicamContext context = new();
+        public MusicamDbContext context = new();
         public MainWindowViewModel model = new();
        
         public SearchView searchView = new SearchView();

@@ -9,10 +9,8 @@
   <StackPanel Spacing="5" Width="200">
     <Border CornerRadius="10" ClipToBounds="True">
       <Panel Background="#7FFF22DD">
-        <Image Width="200" Stretch="Uniform" Source="C:\\Users\\samael\\Desktop\\DungeonSynthProj\\finalcoverEE.jpg"/>
-        <Panel Height="200" IsVisible="{Binding Cover, Converter={x:Static ObjectConverters.IsNull}}">
-
-        </Panel>
+        <Image Width="200" Stretch="Uniform" Source="D:\\diplomFull\\Diplom\\Assets\\songView.png" />
+        
       </Panel>
     </Border>
     <TextBlock Text="{Binding SongName}" HorizontalAlignment="Center" />

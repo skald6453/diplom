@@ -23,7 +23,7 @@ namespace Diplom.Views
                 var album = listbox.SelectedItem as SongViewModel;
                 string? songname = album.SongName;
                 string name = songname.Replace(" ", "");
-                var midifile = MidiFile.Read($"C:\\Users\\samael\\Desktop\\GTP\\{name}.mid");
+                var midifile = MidiFile.Read($"D:\\diplomFull\\Songs\\{name}\\{name}.mid");
                 playback = midifile.GetPlayback(output);
                 playback.MoveToStart();
                 playback.Start();

@@ -15,7 +15,7 @@ namespace Diplom.ViewModels
         { 
             _album = album;
         }
-        public string Cover => _album.Cover;
+        public string Cover =>_album.Cover;
         public string SongName => _album.Song;
         public string Artist => _album.Artist;
     }

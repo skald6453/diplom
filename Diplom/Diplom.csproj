@@ -24,6 +24,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.19" />
     <PackageReference Include="FftSharp" Version="1.1.6" />
     <PackageReference Include="Melanchall.DryWetMidi" Version="6.1.4" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -36,6 +37,13 @@
     </PackageReference>
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="ScottPlot.Avalonia" Version="4.1.63" />
+    <PackageReference Include="SQLite" Version="3.13.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\SongView.axaml.cs">
+      <DependentUpon>SongView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

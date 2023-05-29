@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Diplom;
 
-public partial class Song
+public partial class Songs2
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     public string? Name { get; set; }
 
@@ -13,7 +13,7 @@ public partial class Song
 
     public string? Genre { get; set; }
 
-    public TimeSpan? Duration { get; set; }
+    public string? Duration { get; set; }
 
-    public byte? Difficulty { get; set; }
+    public long? Difficulty { get; set; }
 }

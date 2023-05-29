@@ -34,24 +34,24 @@ public partial class SettingsWindow : Avalonia.Controls.Window
     public SettingsViewModel viewModel = new();
     //public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 60);
     //public DispatcherTimer timer = new DispatcherTimer { Interval = framerate };
-    public MusicamContext context = new();
+    public MusicamDbContext context = new();
     public SettingsWindow()
     {
         InitializeComponent();
         var boxitem = this.Find<ComboBox>("Inputs");
         boxitem = ListOfInputs(AudioDevices);
         var button = this.Find<Button>("Accept");
-        context.Devices.RemoveRange(context.Devices);
+        context.Devices2s.RemoveRange(context.Devices2s);
         context.SaveChanges();
         //здесь можно просто перезаписать активное устройство в бд, а в fftwin брать из бд
         button.Click += (s, e) =>
         {
-            Device inputDevice = new()
+            Devices2 inputDevice = new()
             {
                 Id = boxitem.SelectedIndex,
                 Name = AudioDevices[boxitem.SelectedIndex].DeviceFriendlyName,
             };
-            context.Devices.Add(inputDevice);
+            context.Devices2s.Add(inputDevice);
             context.SaveChanges();
             this.Close();
         };

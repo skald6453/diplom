@@ -23,8 +23,10 @@
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
     <Panel Margin="40">
-     <Label Name="CurrentNote" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{Binding}"/>
+      
+      <Label Name="CurrentNote" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{Binding NoteName}"/>
       <Button Name="Play" Foreground="Wheat" Content="Старт" VerticalAlignment="Bottom"></Button>
+      <Button Name="Stop" Foreground="Wheat" Content="Стоп" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Button>
     </Panel>
   </Panel>
 </Window>
