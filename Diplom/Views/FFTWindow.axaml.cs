@@ -39,7 +39,7 @@ public partial class FFTWindow : Avalonia.Controls.Window
     public MusicamDbContext context = new();
     public Dictionary<string, double> noteBaseFreqs = new Dictionary<string, double>()
             {
-                 { "C3", 130 },
+                { "C3", 130 },
                 { "C#3", 138 },
                 { "D3", 146 },
                 { "Eb3", 155 },
@@ -63,6 +63,20 @@ public partial class FFTWindow : Avalonia.Controls.Window
                 { "A4", 440 },
                 { "Bb4", 466 },
                 { "B4", 493 },
+                { "C5", 523 },
+                { "C#5", 554 },
+                { "D5", 587 },
+                { "D#5", 622 },
+                { "E5", 659 },
+                { "F5", 698 },
+                { "F#5", 739 },
+                { "G5", 784 },
+                { "G#5", 830 },
+                { "A5", 880 },
+                { "A#5", 932 },
+                { "B5", 987 },
+
+
             };
     private static Playback playback;
     public FFTWindow()

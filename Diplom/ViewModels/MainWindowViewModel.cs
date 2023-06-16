@@ -44,7 +44,7 @@ namespace Diplom.ViewModels
                 var result = await ShowDialogSettings.Handle(settings);
             });
 
-            ShowDialogPlay = new Interaction<SongPlayWindow, SongPlayWindowViewModel>();
+            ShowDialogPlay = new Interaction<SongPlayWindow, SongPlayViewModel>();
 
             PlaySongCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -85,7 +85,7 @@ namespace Diplom.ViewModels
 
         public Interaction<SettingsWindow, SettingsViewModel?> ShowDialogSettings { get; } 
 
-        public Interaction<SongPlayWindow, SongPlayWindowViewModel> ShowDialogPlay { get; }
+        public Interaction<SongPlayWindow, SongPlayViewModel> ShowDialogPlay { get; }
 
         public Interaction<MainWindowViewModel, SongViewModel> ShowSongView { get; }
 

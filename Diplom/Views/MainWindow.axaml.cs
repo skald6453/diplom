@@ -52,15 +52,15 @@ namespace Diplom.Views
             interaction.SetOutput(result);
         }
 
-        private async Task DoShowPlaySongDialogAsync(InteractionContext<SongPlayWindow, SongPlayWindowViewModel?> interaction)
+        private async Task DoShowPlaySongDialogAsync(InteractionContext<SongPlayWindow, SongPlayViewModel?> interaction)
         {
             var dialog = new SongPlayWindow
             {
-                DataContext = new SongPlayWindowViewModel(),
+                DataContext = new SongPlayViewModel(),
             };
             dialog.DataContext = interaction.Input;
             
-            var result = await dialog.ShowDialog<SongPlayWindowViewModel?>(this);
+            var result = await dialog.ShowDialog<SongPlayViewModel?>(this);
             interaction.SetOutput(result);
         }
 

@@ -1,5 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Diplom.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -11,7 +12,8 @@
         WindowStartupLocation="CenterScreen"
         Width="900"
         Height="600">
-
+  
+ 
   <Panel>
     <ExperimentalAcrylicBorder IsHitTestVisible="False">
       <ExperimentalAcrylicBorder.Material>
@@ -23,8 +25,8 @@
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
     <Panel Margin="40">
-      
-      <Label Name="CurrentNote" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{Binding NoteName}"/>
+
+      <TextBlock Name="not" Text="note" Foreground="Wheat"></TextBlock>
       <Button Name="Play" Foreground="Wheat" Content="Старт" VerticalAlignment="Bottom"></Button>
       <Button Name="Stop" Foreground="Wheat" Content="Стоп" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Button>
     </Panel>
