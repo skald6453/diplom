@@ -26,7 +26,10 @@
     </ExperimentalAcrylicBorder>
     <Panel Margin="40">
 
-      <TextBlock Name="not" Text="note" Foreground="Wheat"></TextBlock>
+
+      
+      <TextBlock Name="not" FontSize="30" Text="Здесь будут ноты" Foreground="Wheat" HorizontalAlignment="Center" Margin="60"/>
+      <TextBlock Classes="h1" Foreground="Red" Name="Label" FontSize="24" HorizontalAlignment="Center" Margin="170"/>
       <Button Name="Play" Foreground="Wheat" Content="Старт" VerticalAlignment="Bottom"></Button>
       <Button Name="Stop" Foreground="Wheat" Content="Стоп" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Button>
     </Panel>

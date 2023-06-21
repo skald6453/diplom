@@ -13,13 +13,14 @@ namespace Diplom.Views
         public SearchView()
         {
             InitializeComponent();
-
+           
             var listbox = this.Find<ListBox>("Songs");
             var playButton = this.Find<Button>("PlayBut");
             var stopButton = this.Find<Button>("StopBut");
             var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
             playButton.Click += (s, e) =>
             {
+                
                 var album = listbox.SelectedItem as SongViewModel;
                 string? songname = album.SongName;
                 string name = songname.Replace(" ", "");
@@ -30,6 +31,7 @@ namespace Diplom.Views
             };
             stopButton.Click += (s, e) =>
             {
+                
                 playback.Stop();
             };
         }

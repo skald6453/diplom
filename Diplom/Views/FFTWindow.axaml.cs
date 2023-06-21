@@ -191,7 +191,8 @@ public partial class FFTWindow : Avalonia.Controls.Window
         double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioValues);
         double[] fftMag = FftSharp.Transform.FFTmagnitude(paddedAudio);
         Array.Copy(fftMag, FftValues, fftMag.Length);
-        double[] filtered = FftSharp.Filter.LowPass(paddedAudio, 8000, maxFrequency: 512);
+        double[] filtered = FftSharp.Filter.LowPass(paddedAudio, 8000, maxFrequency: 1024);
+
         // find the frequency peak
         int peakIndex = 0;
         for (int i = 0; i < fftMag.Length; i++)
@@ -207,15 +208,14 @@ public partial class FFTWindow : Avalonia.Controls.Window
         {
            double baseFreq = note.Value;
 
-            for (int i = 0; i < 9; i++)
-            {
+            
                 if ((inputNames.Freq >= baseFreq - 1) && (inputNames.Freq < baseFreq + 1) || (inputNames.Freq == baseFreq))
                 {
                     noti = note.Key; break;
                 }
 
                 baseFreq *= 2;
-            }
+           
         }
         label.Text = $"{noti}";
 
