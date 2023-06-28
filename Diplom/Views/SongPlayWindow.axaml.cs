@@ -1,29 +1,30 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using ScottPlot.Avalonia;
-using FftSharp;
-using NAudio.Wave;
-using System.Linq;
-using System.Reflection.Emit;
-using System;
-using NAudio.CoreAudioApi;
-using System.Runtime.Intrinsics.X86;
-using Diplom.ViewModels;
-using DynamicData;
-using System.Collections.Generic;
-using Avalonia.Threading;
-using Avalonia.Media;
-using ScottPlot;
-using System.Data;
-using Microsoft.EntityFrameworkCore;
+using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+using System.Linq;
+using Diplom.ViewModels;
+using Melanchall.DryWetMidi.MusicTheory;
+using DynamicData.Binding;
+using Avalonia.Threading;
+using NAudio.Wave;
+using NAudio;
+using NAudio.CoreAudioApi;
+using System;
+using System.Collections.Generic;
+using ScottPlot.Avalonia;
+using ScottPlot.Styles;
+using System.Drawing;
+using Avalonia.Media;
+using Brushes = Avalonia.Media.Brushes;
 
 namespace Diplom.Views;
 
-public partial class FFTWindow : Avalonia.Controls.Window
+
+public partial class SongPlayWindow : Window
 {
     NAudio.Wave.WaveInEvent? Wave;
     public readonly MMDevice[] AudioDevices = new MMDeviceEnumerator()
@@ -34,11 +35,24 @@ public partial class FFTWindow : Avalonia.Controls.Window
     double[] AudioValues;
     double[] FftValues;
     public FFTWindowViewModel inputNames = new();
-    public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 60);
+    public static TimeSpan framerate = TimeSpan.FromSeconds(1 / 30);
     public DispatcherTimer timer = new DispatcherTimer { Interval = framerate };
     public MusicamDbContext context = new();
+
     public Dictionary<string, double> noteBaseFreqs = new Dictionary<string, double>()
             {
+                { "C2", 65 },
+                { "C#2", 69 },
+                { "D2", 73 },
+                { "D#2", 77 },
+                { "E2", 82 },
+                { "F2", 87 },
+                { "F#2", 92 },
+                { "G2", 98 },
+                { "G#2", 103 },
+                { "A2", 110 },
+                { "A#2", 116 },
+                { "B2", 123 },
                 { "C3", 130 },
                 { "C#3", 138 },
                 { "D3", 146 },
@@ -78,34 +92,49 @@ public partial class FFTWindow : Avalonia.Controls.Window
 
 
             };
-    private static Playback playback;
-    public FFTWindow()
+
+    public static Playback playback;
+    public static SongPlayViewModel viewModel = new();
+    public static string notenum;
+    public static TextBlock textblock;
+    public SongPlayWindow()
     {
-        InitializeComponent();
-
-
-        //надо придумать как вызывать методы ниже при смене значения в комбобоксе, а то так получается
-        //что у меня один раз выбирается аудиовход и все, больше ничего не происходит
-        WasapiCapture audiodevice = GetSelectedDevice();
-        FftMonitor(audiodevice);
-    
-      
         
-        //playback = file.GetPlayback(output);
-        //playback.NotesPlaybackStarted += OnNotesPlaybackStarted;
-        //playback.Start();
-    }
-    private static void OnNotesPlaybackStarted(object sender, NotesEventArgs e)
-    {
-        if (e.Notes.Any(n => n.NoteName == Melanchall.DryWetMidi.MusicTheory.NoteName.B))
+        InitializeComponent();
+        WasapiCapture audiodevice = GetSelectedDevice();
+        NoteMonitor(audiodevice);
+        var playbut = this.Find<Button>("Play");
+        var stopbut = this.Find<Button>("Stop");
+        textblock = this.Find<TextBlock>("not");
+        var output = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
+        
+        playbut.Click += (s, e) =>
+        {
+            //var album = listbox.SelectedItem as SongViewModel;
+            //string? songname = album.SongName;
+            //string name = songname.Replace(" ", "");
+            var midifile = MidiFile.Read($"D:\\diplomFull\\Songs\\505\\505voc.mid");
+            playback = midifile.GetPlayback(output);
+            playback.MoveToStart();
+           
+            playback.Start();
+            playback.NotesPlaybackStarted += OnNotesPlaybackStarted;
+            
+
+        };
+
+        stopbut.Click += (s, e) =>
+        {
+            
             playback.Stop();
+        };
     }
 
     private WasapiCapture GetSelectedDevice()
     {
         string deviceName = "";
         int deviceIndex = 0;
-        foreach(Devices2 device in context.Devices2s)
+        foreach (Devices2 device in context.Devices2s)
         {
             deviceName = device.Name;
             deviceIndex = (int)device.Id;
@@ -116,13 +145,31 @@ public partial class FFTWindow : Avalonia.Controls.Window
             : new WasapiCapture(selectedDevice, true, 10);
     }
 
+    public static void OnNotesPlaybackStarted(object sender, NotesEventArgs e)
+    {
+        foreach (var note in e.Notes)
+        {
+            notenum = note.ToString();
+            viewModel.noteName = notenum;
+            Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                textblock.Text = viewModel.noteName;
+            });
+        }
 
-    public void FftMonitor(WasapiCapture audiodevice)
+        //if (e.Notes.Any(n => n.NoteName == Melanchall.DryWetMidi.MusicTheory.NoteName.B))
+        //    viewModel.NoteName.Add(e.Notes.ToString());
+    }
+
+    public void NoteMonitor(WasapiCapture audiodevice)
     {
         AudioDevice = audiodevice;
         WaveFormat fmt = audiodevice.WaveFormat;
 
         AudioValues = new double[(fmt.SampleRate - 40000)];
+
+
+
         double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioValues);
         double[] fftMag = FftSharp.Transform.FFTpower(paddedAudio);
         FftValues = new double[fftMag.Length];
@@ -130,17 +177,10 @@ public partial class FFTWindow : Avalonia.Controls.Window
         var window = new FftSharp.Windows.Hanning();
         double[] windowed = window.Apply(FftValues);
 
+        
+
+
         double[] filtered = FftSharp.Filter.LowPass(paddedAudio, 8000, maxFrequency: 512);
-
-
-
-        AvaPlot plt = this.Find<AvaPlot>("AvaPlot1");
-        plt.Refresh();
-        plt.Plot.AddSignal(FftValues, fftPeriod);
-        plt.Plot.YLabel("Spectral Power");
-        plt.Plot.XLabel("Frequency (kHz)");
-        plt.Plot.SetAxisLimits(0, 6000, 0, .005);
-        plt.Refresh();
 
         AudioDevice.DataAvailable += WaveIn_DataAvailable;
         AudioDevice.StartRecording();
@@ -187,12 +227,14 @@ public partial class FFTWindow : Avalonia.Controls.Window
     private void Timer1_Tick(object sender, EventArgs e)
     {
         TextBlock label = this.Find<TextBlock>("Label");
-        AvaPlot plt = this.Find<AvaPlot>("AvaPlot1");
+
+   
+
         double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioValues);
+
         double[] fftMag = FftSharp.Transform.FFTmagnitude(paddedAudio);
         Array.Copy(fftMag, FftValues, fftMag.Length);
         double[] filtered = FftSharp.Filter.LowPass(paddedAudio, 8000, maxFrequency: 1024);
-
         // find the frequency peak
         int peakIndex = 0;
         for (int i = 0; i < fftMag.Length; i++)
@@ -202,24 +244,27 @@ public partial class FFTWindow : Avalonia.Controls.Window
         }
         double fftPeriod = FftSharp.Transform.FFTfreqPeriod(AudioDevice.WaveFormat.SampleRate, fftMag.Length);
         double peakFrequency = fftPeriod * peakIndex;
-        inputNames.Freq = Math.Round(peakFrequency);
+        inputNames.Freq = peakFrequency;
         string noti = "";
-        foreach(var note in noteBaseFreqs)
+        foreach (var note in noteBaseFreqs)
         {
-           double baseFreq = note.Value;
+            double baseFreq = note.Value;
 
-            
-                if ((inputNames.Freq >= baseFreq - 1) && (inputNames.Freq < baseFreq + 1) || (inputNames.Freq == baseFreq))
+            //for (int i = 0; i < 9; i++)
+            //{
+                if ((inputNames.Freq >= baseFreq - 2) && (inputNames.Freq < baseFreq + 2) || (inputNames.Freq == baseFreq))
                 {
                     noti = note.Key; break;
                 }
 
-                baseFreq *= 2;
-           
+                //baseFreq *= 2;
+            //}
         }
         label.Text = $"{noti}";
-
-        // request a redraw using a non-blocking render queue
-        plt.RefreshRequest();
+        if (label.Text == textblock.Text)
+        {
+            label.Foreground = Brushes.Green; 
+        }
+        else label.Foreground = Brushes.Red;
     }
 }

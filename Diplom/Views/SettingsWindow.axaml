@@ -4,12 +4,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Diplom.Views.SettingsWindow"
+        xmlns:local="using:Diplom.Views"
         Title="SettingsWindow"
         TransparencyLevelHint="AcrylicBlur"
         ExtendClientAreaToDecorationsHint="True"
         WindowStartupLocation="CenterOwner"
-        Width="860"
-        Height="600">
+        Width="600"
+        Height="300">
 
   <Panel>
     <ExperimentalAcrylicBorder IsHitTestVisible="False">
@@ -21,14 +22,14 @@
             MaterialOpacity="0.65" />
       </ExperimentalAcrylicBorder.Material>
     </ExperimentalAcrylicBorder>
-    
-    <ComboBox Name="Inputs" Width="500" VerticalAlignment="Top" HorizontalAlignment="Center" >
+    <TextBlock Text="Выберите устройство ввода" Foreground="White" TextAlignment="Center" Margin="20"/>
+    <ComboBox Margin="50" Name="Inputs" Width="500" VerticalAlignment="Top" HorizontalAlignment="Center" >
       <ComboBox.ItemTemplate>
         <DataTemplate>
           <TextBlock Name="InputText" Text="{Binding}"/>
         </DataTemplate>
       </ComboBox.ItemTemplate>
     </ComboBox>
-    <Button Name="Accept" Content="Принять" Background="#D0BDB2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"/>
+    <Button Margin="50" Name="Accept" Content="Принять" Background="#D0BDB2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="100"/>
   </Panel>
 </Window>

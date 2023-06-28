@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Diplom.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Diplom.Views.SongPlayWindow"
+        Title="SongPlayWindow"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterScreen"
+        Width="900"
+        Height="600">
+  
+ 
+  <Panel>
+    <ExperimentalAcrylicBorder IsHitTestVisible="False">
+      <ExperimentalAcrylicBorder.Material>
+        <ExperimentalAcrylicMaterial
+            BackgroundSource="Digger"
+            TintColor="Black"
+            TintOpacity="1"
+            MaterialOpacity="0.25" />
+      </ExperimentalAcrylicBorder.Material>
+    </ExperimentalAcrylicBorder>
+    <Panel Margin="40">
+
+
+      
+      <TextBlock Name="not" FontSize="30" Text="Здесь будут ноты" Foreground="Wheat" HorizontalAlignment="Center" Margin="60"/>
+      <TextBlock Classes="h1" Foreground="Red" Name="Label" FontSize="24" HorizontalAlignment="Center" Margin="170"/>
+      <Button Name="Play" Foreground="Wheat" Content="Старт" VerticalAlignment="Bottom"></Button>
+      <Button Name="Stop" Foreground="Wheat" Content="Стоп" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Button>
+    </Panel>
+  </Panel>
+</Window>

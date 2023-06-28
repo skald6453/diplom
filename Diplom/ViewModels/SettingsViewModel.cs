@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Diplom.ViewModels
 {
-    public class TestViewModel
+    public class SettingsViewModel
     {
+        public List<string>? Inputs { get; set; }
     }
 }
